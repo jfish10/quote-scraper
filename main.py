@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import additional_quotes
 
 
 result = requests.get('http://quotes.toscrape.com/')
@@ -16,10 +17,21 @@ for quote in quotes:
     author = quote.find('small', class_='author').text
     scraped.append([text, author])
 
-for scrape in scraped:
-  print(scrape)
 
-with open('famous-quotes.csv', 'a') as quotations:
+additional_quotes = additional_quotes.handle_additional_site('https://www.keepinspiring.me/famous-quotes/')
+
+
+
+with open('famous-quotes.csv', 'w') as quotations:
    writer = csv.writer(quotations, delimiter=',')
    for quote in scraped:
      writer.writerow(quote)
+   for quote in additional_quotes:
+     writer.writerow(quote)
+
+
+
+print("Quotes added successfully!")
+
+
+
